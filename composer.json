@@ -1,0 +1,37 @@
+{
+  "name": "phpzm/data",
+  "description": "Simples Data package",
+  "minimum-stability": "dev",
+  "keywords": [
+    "php",
+    "framework",
+    "api",
+    "simples"
+  ],
+  "homepage": "https://github.com/phpzm/data",
+  "license": "MIT",
+  "version": "1.0.0",
+  "type": "package",
+  "authors": [
+    {
+      "name": "William",
+      "email": "wilcorrea@gmail.com"
+    },
+    {
+      "name": "Ezio",
+      "email": "ezioadsr@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "phpzm/helper": "dev-master",
+    "phpzm/kernel": "dev-master",
+    "phpzm/model": "dev-master",
+    "phpzm/persistence": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Simples\\Data\\": "src/"
+    }
+  }
+}
