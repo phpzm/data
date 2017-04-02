@@ -40,10 +40,10 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
      * @param array|stdClass $data
      * @param bool $injectable
      */
-    public function __construct($data, bool $injectable = true)
+    public function __construct($data = [], $injectable = true)
     {
-        $this->public = (array)$data;
-        $this->injectable = $injectable;
+        $this->public = (array)coalesce($data, []);
+        $this->injectable = (boolean)coalesce($injectable, true);
         $this->private = [];
     }
 
