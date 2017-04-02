@@ -49,11 +49,12 @@ trait DatabaseValidator
         $class = off($options, 'class');
         $field = off($options, 'field');
         if (class_exists($class)) {
-            $instance = Container::box()->make($class);
+            $instance = Container::instance()->make($class);
             /** @var AbstractModel $instance */
             $filter = [$field => $value];
             if (off($options, 'primaryKey.value')) {
-                $filter[off($options, 'primaryKey.name')] = Filter::apply(Filter::RULE_NOT, off($options, 'primaryKey.value'));
+                $pk = off($options, 'primaryKey.value');
+                $filter[off($options, 'primaryKey.name')] = Filter::apply(Filter::RULE_NOT, $pk);
             }
             return $instance->count($filter) === 0;
         }
