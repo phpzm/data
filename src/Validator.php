@@ -24,7 +24,7 @@ class Validator
      */
     const
         ACCEPTED = 'accepted', ACTIVE = 'active', AFTER = 'after', ALPHA = 'alpha', ALPHA_DASH = 'alpha-dash',
-        ALPHA_NUMERIC = 'alpha-numeric', ARRAY = 'array', BEFORE = 'before', BETWEEN = 'between', BOOLEAN = 'boolean',
+        ALPHA_NUMERIC = 'alpha-numeric', BEFORE = 'before', BETWEEN = 'between', BOOLEAN = 'boolean',
         CONFIRMED = 'confirmed', DATE = 'date', DATE_FORMAT = 'date-format', DIFFERENT = 'different', DIGITS = 'digits',
         DIGITS_BETWEEN = 'digits-between', DIMENSIONS = 'dimensions', DISTINCT = 'distinct', EMAIL = 'email',
         EXISTING = 'existing', FILE = 'file', FILLED = 'filled', IMAGE = 'image', IN = 'in', IN_ARRAY = 'in-array',
