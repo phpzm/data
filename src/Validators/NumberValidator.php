@@ -39,7 +39,7 @@ trait NumberValidator
         if (gettype($value) === TYPE_STRING) {
             $value = (float)$value;
         }
-        return is_float($value);
+        return is_float($value) || is_integer($value);
     }
 
     /**
