@@ -3,7 +3,7 @@
 namespace Simples\Data\Validators;
 
 use Simples\Kernel\Container;
-use Simples\Model\AbstractModel;
+use Simples\Model\ModelAbstract;
 use Simples\Persistence\Filter;
 
 /**
@@ -50,7 +50,7 @@ trait DatabaseValidator
         $field = off($options, 'field');
         if (class_exists($class)) {
             $instance = Container::instance()->make($class);
-            /** @var AbstractModel $instance */
+            /** @var ModelAbstract $instance */
             $filter = [$field => $value];
             if (off($options, 'primaryKey.value')) {
                 $pk = off($options, 'primaryKey.value');
