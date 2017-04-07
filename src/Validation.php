@@ -32,12 +32,15 @@ class Validation
     {
         $rules = [];
         foreach ($arguments as $argument) {
-            if (gettype($argument) === TYPE_STRING) {
+            if (type($argument, TYPE_STRING)) {
                 $rules[$argument] = '';
-            } elseif (gettype($argument) === TYPE_ARRAY) {
-                foreach ($argument as $rule => $options) {
-                    $rules[$rule] = $options;
-                }
+                continue;
+            }
+            if (!type($argument, TYPE_ARRAY)) {
+                continue;
+            }
+            foreach ($argument as $rule => $options) {
+                $rules[$rule] = $options;
             }
         }
         $this->rules[$field] = ['rules' => $rules, 'value' => $value];

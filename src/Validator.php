@@ -98,9 +98,10 @@ class Validator
                 $error[] = $rule;
             }
             if ($isValid && off($options, 'enum')) {
-                if (!in_array($value, off($options, 'enum'))) {
-                    $error[] = 'enum';
-                }
+                $enum = off($options, 'enum');
+            }
+            if (isset($enum) && !in_array($value, $enum)) {
+                $error[] = 'enum';
             }
         }
         return $error;
