@@ -4,6 +4,7 @@ namespace Simples\Data;
 
 use IteratorAggregate;
 use JsonSerializable;
+use Simples\Data\Error\SimplesRecordReadonlyError;
 use Simples\Error\SimplesRunTimeError;
 use Simples\Helper\JSON;
 use Simples\Unit\Origin;
@@ -32,31 +33,50 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
      * Define if the can be expanded
      * @var bool
      */
-    private $injectable;
+    private $editable;
+
+    /**
+     * List of mutations of record
+     * @var array
+     */
+    private $mutations;
 
     /**
      *
      * Record constructor.
-     * @param array|stdClass $data
-     * @param bool $injectable
+     * @param array|stdClass $data ([])
+     * @param bool $editable (false)
+     * @param array $mutations ([])
+     * @param array $private
      */
-    public function __construct($data = [], $injectable = true)
-    {
+    public function __construct(
+        $data,
+        bool $editable = true,
+        array $mutations = [],
+        array $private = []
+    ) {
         $this->public = (array)coalesce($data, []);
-        $this->injectable = (boolean)coalesce($injectable, true);
-        $this->private = [];
+        $this->editable = (boolean)coalesce($editable, true);
+        $this->mutations = (array)coalesce($mutations, []);
+        $this->private = (array)coalesce($private, []);
     }
 
     /**
      *
      * Factory constructor
      * @param array|stdClass $data
-     * @param bool $injectable
+     * @param bool $editable (false)
+     * @param array $mutations ([])
+     * @param array $private
      * @return Record
      */
-    public static function make($data, bool $injectable = true): Record
-    {
-        return new static($data, $injectable);
+    public static function make(
+        $data,
+        bool $editable = true,
+        array $mutations = [],
+        array $private = []
+    ): Record {
+        return new static($data, $editable, $mutations, $private);
     }
 
     /**
@@ -127,8 +147,8 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
      */
     public function set(string $name, $value): Record
     {
-        if (!$this->isInjectable() && !$this->indexOf($name)) {
-            throw new SimplesRunTimeError("The entry '{$name}' not exists");
+        if (!$this->isEditable()) {
+            throw new SimplesRecordReadonlyError(['set' => [$name => $value]]);
         }
         $this->public[$name] = $value;
         return $this;
@@ -138,9 +158,13 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
      * Remove a key and associated value of the Record
      * @param string $name
      * @return Record
+     * @throws SimplesRecordReadonlyError
      */
     public function remove(string $name): Record
     {
+        if (!$this->isEditable()) {
+            throw new SimplesRecordReadonlyError(['remove' => $name]);
+        }
         unset($this->public[$name]);
         return $this;
     }
@@ -179,12 +203,18 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
      * @param array $public
      * @param array $private
      * @return Record
+     * @throws SimplesRecordReadonlyError
      */
     public function merge(array $public, array $private = []): Record
     {
-        $this->public = array_merge($this->public, $public);
-        $this->private = array_merge($this->private, $private);
-        return $this;
+        $public = array_merge($this->public, $public);
+        $private = array_merge($this->private, $private);
+        if ($this->isEditable()) {
+            $this->public = $public;
+            $this->private = $private;
+            return $this;
+        }
+        return static::make($public, $this->isEditable(), $this->mutations, $this->private);
     }
 
     /**
@@ -193,12 +223,18 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
      * @param array $public
      * @param array $private
      * @return Record
+     * @throws SimplesRecordReadonlyError
      */
     public function import(array $public, array $private = []): Record
     {
-        $this->public = array_merge($public, $this->public);
-        $this->private = array_merge($private, $this->private);
-        return $this;
+        $public = array_merge($public, $this->public);
+        $private = array_merge($private, $this->private);
+        if ($this->isEditable()) {
+            $this->public = $public;
+            $this->private = $private;
+            return $this;
+        }
+        return static::make($public, $this->isEditable(), $this->mutations, $this->private);
     }
 
     /**
@@ -262,12 +298,12 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
     }
 
     /**
-     * Return info about injectable property of the Record
+     * Return info about editable property of the Record
      * @return bool
      */
-    public function isInjectable(): bool
+    public function isEditable(): bool
     {
-        return $this->injectable;
+        return $this->editable;
     }
 
     /**
@@ -321,5 +357,34 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
     public function jsonSerialize()
     {
         return $this->public;
+    }
+
+    /**
+     * @param string $name
+     * @param callable $callable
+     * @return Record
+     * @throws SimplesRecordReadonlyError
+     */
+    public function on(string $name, callable $callable)
+    {
+        if (!$this->isEditable()) {
+            throw new SimplesRecordReadonlyError(['on' => $name]);
+        }
+        $this->mutations[$name] = $callable;
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return Record
+     * @throws SimplesRecordReadonlyError
+     */
+    public function off(string $name)
+    {
+        if (!$this->isEditable()) {
+            throw new SimplesRecordReadonlyError(['off' => $name]);
+        }
+        unset($this->mutations[$name]);
+        return $this;
     }
 }

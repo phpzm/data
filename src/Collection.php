@@ -11,7 +11,7 @@ use Simples\Error\SimplesRunTimeError;
  * @property Collection each
  * @package Simples\Core\Domain
  */
-class Collection extends AbstractCollection
+final class Collection extends CollectionAbstract
 {
     /**
      * @var mixed
@@ -22,6 +22,11 @@ class Collection extends AbstractCollection
      * @var array
      */
     protected $higher = [];
+
+    /**
+     * @var array
+     */
+    protected $mutations = [];
 
     /**
      * Collection constructor.
@@ -143,5 +148,38 @@ class Collection extends AbstractCollection
     public function size()
     {
         return count($this->records);
+    }
+
+    /**
+     * @return Record
+     */
+    public function current()
+    {
+        $current = current($this->records);
+        if (!$current) {
+            $current = [];
+        }
+        return Record::make($current, true, $this->mutations);
+    }
+
+    /**
+     * @param string $field
+     * @param callable $callable
+     * @return Collection
+     */
+    public function on(string $field, callable $callable)
+    {
+        $this->mutations[$field] = $callable;
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @return Collection
+     */
+    public function off(string $field)
+    {
+        unset($this->mutations[$field]);
+        return $this;
     }
 }

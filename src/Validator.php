@@ -95,13 +95,13 @@ class Validator
             }
             $isValid = $this->apply($rule, $value, $options);
             if (!$isValid) {
-                $error[] = $rule;
+                $error[] = ['rule' => $rule, 'value' => $value];
             }
             if ($isValid && off($options, 'enum')) {
                 $enum = off($options, 'enum');
             }
             if (isset($enum) && !in_array($value, $enum)) {
-                $error[] = 'enum';
+                $error[] = ['rule' => 'enum', 'accepted' => $enum, 'value' => $value];
             }
         }
         return $error;
