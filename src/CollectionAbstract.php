@@ -9,7 +9,7 @@ use Simples\Unit\Origin;
  * Class AbstractCollection
  * @package Simples\Data
  */
-class AbstractCollection extends Origin implements Iterator
+class CollectionAbstract extends Origin implements Iterator
 {
     /**
      * @var array
