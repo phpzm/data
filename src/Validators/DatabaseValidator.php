@@ -50,7 +50,6 @@ trait DatabaseValidator
         $field = off($options, 'field');
         if (class_exists($class)) {
             $instance = Container::instance()->make($class);
-            /** @var ModelAbstract $instance */
             $filter = [$field => $value];
             if (off($options, 'primaryKey.value')) {
                 $pk = off($options, 'primaryKey.value');
