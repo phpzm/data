@@ -71,4 +71,12 @@ class CollectionAbstract extends Origin implements Iterator
     {
         return $this->records;
     }
+
+    /**
+     * @return mixed
+     */
+    protected function expose()
+    {
+        return $this->getRecords();
+    }
 }

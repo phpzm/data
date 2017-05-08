@@ -3,7 +3,6 @@
 namespace Simples\Data;
 
 use IteratorAggregate;
-use JsonSerializable;
 use Simples\Data\Error\SimplesRecordReadonlyError;
 use Simples\Error\SimplesRunTimeError;
 use Simples\Helper\JSON;
@@ -15,7 +14,7 @@ use stdClass;
  * @property string json
  * @package Simples\Core\Domain
  */
-class Record extends Origin implements IteratorAggregate, JsonSerializable
+class Record extends Origin implements IteratorAggregate
 {
     /**
      * Values accessible of Record
@@ -348,13 +347,9 @@ class Record extends Origin implements IteratorAggregate, JsonSerializable
     }
 
     /**
-     * Specify data which should be serialized to JSON
-     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     * @return array
      */
-    public function jsonSerialize()
+    protected function expose()
     {
         return $this->public;
     }
