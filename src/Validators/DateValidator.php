@@ -3,6 +3,8 @@
 namespace Simples\Data\Validators;
 
 use Simples\Helper\Date;
+use Simples\Helper\Datetime;
+use Simples\Helper\Time;
 
 /**
  * Class DateValidator
@@ -12,13 +14,30 @@ trait DateValidator
 {
     /**
      * @param $value
-     * @return mixed
+     * @return bool
      */
     public function isDate($value)
     {
-        return Date::isDate($value);
+        return Date::isValid($value);
     }
 
+    /**
+     * @param $value
+     * @return bool
+     */
+    public function isDatetime($value)
+    {
+        return Datetime::isValid($value);
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     */
+    public function isTime($value)
+    {
+        return Time::isValid($value);
+    }
     /**
      * @param $value
      * @return mixed
