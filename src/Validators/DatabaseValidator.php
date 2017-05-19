@@ -3,7 +3,6 @@
 namespace Simples\Data\Validators;
 
 use Simples\Kernel\Container;
-use Simples\Model\ModelAbstract;
 use Simples\Persistence\Filter;
 
 /**
