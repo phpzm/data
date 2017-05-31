@@ -3,6 +3,7 @@
 namespace Simples\Data;
 
 use Iterator;
+use Simples\Data\Resources\GroupRecords;
 use Simples\Unit\Origin;
 
 /**
@@ -11,6 +12,11 @@ use Simples\Unit\Origin;
  */
 class CollectionAbstract extends Origin implements Iterator
 {
+    /**
+     * @trait GroupRecords
+     */
+    use GroupRecords;
+
     /**
      * @var array
      */
@@ -62,6 +68,14 @@ class CollectionAbstract extends Origin implements Iterator
         $key = key($this->records);
         $var = ($key !== null && $key !== false);
         return $var;
+    }
+
+    /**
+     * @return array
+     */
+    public function all()
+    {
+        return $this->getRecords();
     }
 
     /**
