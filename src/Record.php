@@ -154,6 +154,21 @@ class Record extends Origin implements IteratorAggregate
     }
 
     /**
+     * Copy the value of one index to another
+     * @param string $target
+     * @param string $source
+     * @param bool $override (true)
+     * @return $this
+     */
+    public function copy(string $target, string $source, bool $override = false)
+    {
+        if (is_null($this->get($target)) || $override) {
+            $this->set($target, $this->get($source));
+        }
+        return $this;
+    }
+
+    /**
      * Remove a key and associated value of the Record
      * @param string $name
      * @return Record
