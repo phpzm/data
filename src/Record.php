@@ -155,7 +155,7 @@ class Record extends Origin implements IteratorAggregate
 
     /**
      * Copy the value of one index to another
-     * 
+     *
      * @param string $target
      * @param string $source
      * @param bool $override (true)
