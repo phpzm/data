@@ -8,6 +8,8 @@ use Simples\Error\SimplesRunTimeError;
 use Simples\Helper\JSON;
 use Simples\Unit\Origin;
 use stdClass;
+use function count;
+use function is_array;
 
 /**
  * Class Record
@@ -274,14 +276,36 @@ class Record extends Origin implements IteratorAggregate
 
     /**
      * Recover all values of the Record
+     * @param array $keys
+     * @return array
+     */
+    public function just(array $keys = []): array
+    {
+        if (!is_array($keys) || !count($keys)) {
+            return [];
+        }
+        $just = [];
+        foreach ($this->public as $key => $value) {
+            if (in_array($key, $keys)) {
+                $just[$key] = $value;
+            }
+        }
+        return $just;
+    }
+
+    /**
+     * Recover all values of the Record
      * @param array $except
      * @return array
      */
     public function all(array $except = []): array
     {
+        if (!is_array($except) || !count($except)) {
+            return $this->public;
+        }
         $all = [];
         foreach ($this->public as $key => $value) {
-            if (is_null($except) || !in_array($key, $except)) {
+            if (!in_array($key, $except)) {
                 $all[$key] = $value;
             }
         }
