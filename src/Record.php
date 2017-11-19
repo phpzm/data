@@ -255,6 +255,26 @@ class Record extends Origin implements IteratorAggregate
     }
 
     /**
+     * Update all data in Record
+     *
+     * @param array $public
+     * @param array $private
+     * @return Record
+     * @throws SimplesRecordReadonlyError
+     */
+    public function update(array $public, array $private = []): Record
+    {
+        if ($this->isEditable()) {
+            $this->public = $public;
+            if (count($private)) {
+                $this->private = $private;
+            }
+            return $this;
+        }
+        return static::make($public, $this->isEditable(), $this->mutations, $this->private);
+    }
+
+    /**
      * Get the name of properties managed by Record
      * @param array $except
      * @return array
