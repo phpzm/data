@@ -49,6 +49,7 @@ class Record extends Origin implements IteratorAggregate
      * @param bool $editable (false)
      * @param array $mutations ([])
      * @param array $private
+     * @throws SimplesRunTimeError
      */
     public function __construct(
         $data,
@@ -122,6 +123,7 @@ class Record extends Origin implements IteratorAggregate
      * @param string $name
      * @param $value
      * @return Record
+     * @throws SimplesRunTimeError
      */
     public function __set($name, $value): Record
     {
@@ -162,6 +164,7 @@ class Record extends Origin implements IteratorAggregate
      * @param string $source
      * @param bool $override (true)
      * @return $this
+     * @throws SimplesRunTimeError
      */
     public function copy(string $target, string $source, bool $override = false)
     {
@@ -220,7 +223,6 @@ class Record extends Origin implements IteratorAggregate
      * @param array $public
      * @param array $private
      * @return Record
-     * @throws SimplesRecordReadonlyError
      */
     public function merge(array $public, array $private = []): Record
     {
@@ -240,7 +242,6 @@ class Record extends Origin implements IteratorAggregate
      * @param array $public
      * @param array $private
      * @return Record
-     * @throws SimplesRecordReadonlyError
      */
     public function import(array $public, array $private = []): Record
     {
@@ -260,7 +261,6 @@ class Record extends Origin implements IteratorAggregate
      * @param array $public
      * @param array $private
      * @return Record
-     * @throws SimplesRecordReadonlyError
      */
     public function update(array $public, array $private = []): Record
     {
@@ -386,6 +386,7 @@ class Record extends Origin implements IteratorAggregate
     /**
      * Return a string of properties of the Record
      * @return string
+     * @throws SimplesRunTimeError
      */
     public function toJSON(): string
     {
