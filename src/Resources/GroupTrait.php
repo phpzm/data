@@ -8,7 +8,7 @@ use Simples\Data\Collection;
  * Trait Group
  * @package Simples\Data\Resources
  */
-trait GroupRecords
+trait GroupTrait
 {
     /**
      * @var array
